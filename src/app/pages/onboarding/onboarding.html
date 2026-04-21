@@ -1,0 +1,35 @@
+<section class="min-h-screen">
+  <div class="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 py-16">
+    <div class="mb-12 text-center">
+      <p class="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-fuchsia-400">Welcome</p>
+      <!-- Header -->
+      <h1 class="mb-4 text-4xl font-bold tracking-tight sm:text-5xl">Choose your role</h1>
+    </div>
+
+    <!-- Role Cards -->
+    <div class="grid w-full max-w-4xl gap-6 md:grid-cols-2">
+      @for (card of roleCards; track card.role) {
+        <button
+          type="button"
+          class="group rounded-3xl border border-slate-800 bg-slate-800 p-8 text-left shadow-lg transition duration-300 hover:-translate-y-1 hover:bg-slate-700"
+          [class]="card.borderHover"
+        >
+          <div class="mb-6 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
+            <img
+              [src]="card.image"
+              [alt]="card.title + ' onboarding image'"
+              class="h-48 w-full object-contain"
+            />
+          </div>
+          <h2 class="mb-3 text-2xl font-semibold">{{ card.title }}</h2>
+          <span
+            class="inline-flex items-center text-sm font-medium transition group-hover:translate-x-1"
+            [class]="card.textColor"
+          >
+            {{ card.subtitle }}
+          </span>
+        </button>
+      }
+    </div>
+  </div>
+</section>
