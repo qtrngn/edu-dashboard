@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
 
-type Role = 'teacher' | 'student';
+export type Role = 'teacher' | 'student';
 interface RoleCard {
   role: Role;
   title: string;
@@ -12,7 +14,7 @@ interface RoleCard {
 
 @Component({
   selector: 'app-onboarding',
-  imports: [],
+  imports: [RouterLink, NgClass],
   templateUrl: './onboarding.html',
 })
 export class Onboarding {
