@@ -1,15 +1,14 @@
-import { Component, Input } from '@angular/core';
-import type { Role } from '../../../pages/onboarding/onboarding';
+import { Component, Input } from "@angular/core";
+import type { Role } from "../../../pages/onboarding/onboarding";
 
 @Component({
-  selector: 'app-auth',
+  selector: "app-auth",
   imports: [],
-  templateUrl: './auth.html',
+  templateUrl: "./auth.html",
 })
 export class Auth {
   @Input({ required: true }) role!: Role;;
 
-  @Input() panelLabel = '';
-  @Input() panelTitle = '';
-  @Input() panelDescription = '';
+  @Input() panelLabel = "";
+  @Input() panelTitle = "";
 }

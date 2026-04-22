@@ -1,1 +1,122 @@
-<p>register works!</p>
+<app-auth
+  [role]="role"
+  [panelLabel]="role === 'teacher' ? 'Teacher' : 'Student'"
+  [panelTitle]="role === 'teacher' ? 'Create account to manage teachers' : 'Create account to manage students'"
+>
+  <!-- Header -->
+  <div class="mb-8 text-center">
+    <p class="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-fuchsia-400">
+      Register
+    </p>
+    <h2 class="text-4xl font-bold text-white">Create account</h2>
+  </div>
+
+  <!-- Form -->
+  <form (submit)="onSubmit($event)" class="space-y-5">
+    <!-- Username -->
+    <div>
+      <input
+        [formField]="registerForm.username"
+        type="text"
+        placeholder="Username"
+        class="auth-input"
+      />
+
+      @if (registerForm.username().touched() && registerForm.username().invalid()) {
+        <p class="mt-2 text-sm text-red-400">
+          {{ registerForm.username().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+
+    <!-- Email -->
+    <div>
+      <input [formField]="registerForm.email" type="email" placeholder="Email" class="auth-input" />
+
+      @if (registerForm.email().touched() && registerForm.email().invalid()) {
+        <p class="mt-2 text-sm text-red-400">
+          {{ registerForm.email().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+
+    <!-- Password -->
+    <div>
+      <div class="relative">
+        <input
+          [formField]="registerForm.password"
+          [type]="showPassword() ? 'text' : 'password'"
+          placeholder="Password"
+          class="auth-input"
+        />
+
+        <button
+          type="button"
+          (click)="togglePassword()"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-white"
+          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+        >
+        @if (showPassword()) {
+              <svg lucideEye class="h-5 w-5"></svg>
+        } @else {
+            <svg lucideEyeOff class="h-5 w-5"></svg>
+        }
+        </button>
+      </div>
+
+      @if (registerForm.password().touched() && registerForm.password().invalid()) {
+        <p class="mt-2 text-sm text-red-400">
+          {{ registerForm.password().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+
+    <!-- Confirm Password -->
+    <div>
+      <div class="relative">
+        <input
+          [formField]="registerForm.confirmPassword"
+          [type]="showConfirmPassword() ? 'text' : 'password'"
+          placeholder="Confirm password"
+          class="auth-input"
+        />
+
+        <button
+          type="button"
+          (click)="toggleConfirmPassword()"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-white"
+          [attr.aria-label]="
+            showConfirmPassword() ? 'Hide confirm password' : 'Show confirm password'
+          "
+        >
+          @if (showConfirmPassword()) {
+            <svg lucideEye class="h-5 w-5"></svg>
+          } @else {
+            <svg lucideEyeOff class="h-5 w-5"></svg>
+          }
+        </button>
+      </div>
+
+      @if (registerForm.confirmPassword().touched() && registerForm.confirmPassword().invalid()) {
+        <p class="mt-2 text-sm text-red-400">
+          {{ registerForm.confirmPassword().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+
+    <!-- Submit -->
+    <button
+      type="submit"
+      [disabled]="!registerForm().valid() || registerForm().submitting()"
+      class="auth-button"
+    >
+      Create account
+    </button>
+
+    <!-- Login link -->
+    <p class="text-center text-sm text-slate-400">
+      Already have an account?
+      <a [routerLink]="['/login', role]" class="auth-link"> Log in </a>
+    </p>
+  </form>
+</app-auth>

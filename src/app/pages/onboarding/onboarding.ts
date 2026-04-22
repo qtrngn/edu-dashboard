@@ -18,14 +18,14 @@ interface RoleCard {
   templateUrl: './onboarding.html',
 })
 export class Onboarding {
-   roleCards: RoleCard[] = [
+  roleCards: RoleCard[] = [
     {
       role: 'teacher',
       title: 'Teacher',
       subtitle: 'Continue →',
       image: 'assets/images/onboarding/onboarding-teacher.gif',
       borderHover: 'hover:border-teal-300',
-      textColor: 'text-teal-300'
+      textColor: 'text-teal-300',
     },
     {
       role: 'student',
@@ -33,7 +33,7 @@ export class Onboarding {
       subtitle: 'Continue →',
       image: 'assets/images/onboarding/onboarding-student.gif',
       borderHover: 'hover:border-pink-400',
-      textColor: 'text-pink-400'
-    }
+      textColor: 'text-pink-400',
+    },
   ];
 }
