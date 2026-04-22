@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { FirebaseApp, getApp, getApps, initializeApp } from 'firebase/app';
 import { Auth as FirebaseAuth, getAuth } from 'firebase/auth';
 import { environment } from '@environments/environment';
+import { Firestore, getFirestore } from 'firebase/firestore';
 
 @Injectable({
   // Create 1 shared instance for the whole app
@@ -13,11 +14,15 @@ export class FirebaseService {
   readonly app: FirebaseApp;
   // Hold the firebase auth instance
   readonly auth: FirebaseAuth;
+  // Hold the firebase firestore instance
+  readonly db: Firestore;
 
   constructor() {
     // If app exists use getApp() otherwise use initializeApp()
     this.app = getApps().length ? getApp() : initializeApp(environment.firebase);
     // Create firebase auth for this app
     this.auth = getAuth(this.app);
+    // Create firebase firestore for this app
+    this.db = getFirestore(this.app);
   }
 }

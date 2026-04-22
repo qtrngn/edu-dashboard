@@ -13,6 +13,7 @@ import { LucideEye, LucideEyeOff } from '@lucide/angular';
 import { Auth } from '@shared/layout/auth/auth';
 import { AuthService } from '@service/auth.service';
 import type { Role } from '@pages/onboarding/onboarding';
+import { UserProfileService } from '@service/user-profile.service';
 
 interface RegisterForm {
   username: string;
@@ -78,6 +79,7 @@ export class Register implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
+    private userProfileService: UserProfileService,
     private router: Router,
   ) {}
 
@@ -114,11 +116,18 @@ export class Register implements OnInit {
   // Handle form submission and navigate users
   onSubmit(event: Event): void {
     event.preventDefault();
-
     submit(this.registerForm, {
       action: async () => {
         const { username, email, password } = this.registerModel();
-        await this.authService.register(email, password, username);
+        const user = await this.authService.register(email, password, username);
+        await this.userProfileService.createUserProfile({
+          uid: user.uid,
+          email,
+          username,
+          role: this.role,
+          createdAt: new Date().toISOString(),
+        });
+
         await this.navigateByRole();
       },
     });
