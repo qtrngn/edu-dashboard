@@ -2,8 +2,8 @@
   <!-- Left Side -->
   <div
     class="relative hidden min-h-screen overflow-hidden lg:block"
-    [class.bg-sky-50]="role === 'teacher'"
-    [class.bg-emerald-50]="role === 'student'"
+    [class.bg-sky-50]="role === 'admin'"
+    [class.bg-emerald-50]="role === 'teacher'"
   >
     <div class="flex h-full flex-col justify-between px-10 py-8 text-slate-900">
       <!-- Logo -->
@@ -11,7 +11,7 @@
         <p class="text-3xl font-bold">Education</p>
       </div>
 
-          <!-- Hero Content -->
+      <!-- Hero Content -->
       <div class="flex flex-1 items-center justify-center">
         <div class="mx-auto w-full max-w-xl text-center">
           <p class="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-slate-600">
@@ -26,10 +26,11 @@
     </div>
   </div>
 
-
   <!-- Right Side / Login Form -->
   <div class="flex min-h-screen items-center justify-center bg-slate-700 px-6 py-10">
-    <div class="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 shadow-xl backdrop-blur-sm">
+    <div
+      class="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 shadow-xl backdrop-blur-sm"
+    >
       <ng-content></ng-content>
     </div>
   </div>

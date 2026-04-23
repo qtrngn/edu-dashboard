@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { DashboardShell } from '@shared/layout/dashboard-shell/dashboard-shell';
 
 @Component({
-  selector: 'app-teacher-dashboard',
+  selector: 'app-admin-dashboard',
   imports: [DashboardShell],
-  templateUrl: './teacher-dashboard.html',
+  templateUrl: './admin-dashboard.html',
 })
-export class TeacherDashboard {}
+export class AdminDashboard {}

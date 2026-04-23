@@ -1,30 +1,33 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 // PAGES
 import { Onboarding } from '@pages/onboarding/onboarding';
 import { Login } from '@pages/login/login';
 import { Register } from '@pages/register/register';
-import { TeacherDashboard } from "@pages/dashboard/teacher-dashboard/teacher-dashboard";
-import { StudentDashboard } from '@pages/dashboard/student-dashboard/student-dashboard';
+import { AdminDashboard  } from '@pages/dashboard/admin-dashboard/admin-dashboard';
+import { TeacherDashboard } from '@pages/dashboard/teacher-dashboard/teacher-dashboard';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Onboarding
+    component: Onboarding,
   },
   {
     path: 'login/:role',
-    component: Login
+    component: Login,
   },
   {
     path: 'register/:role',
-    component: Register
+    component: Register,
   },
   {
-    path: "dashboard/teacher",
+    path: 'dashboard/admin',
+    component: AdminDashboard,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'dashboard/teacher',
     component: TeacherDashboard,
-  },
-  {
-    path: "dashboard/student",
-    component: StudentDashboard,
+    canActivate: [authGuard],
   },
 ];

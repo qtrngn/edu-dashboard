@@ -8,7 +8,6 @@ import type { Role } from "../../../pages/onboarding/onboarding";
 })
 export class Auth {
   @Input({ required: true }) role!: Role;;
-
   @Input() panelLabel = "";
   @Input() panelTitle = "";
 }

@@ -26,6 +26,7 @@ export class Login implements OnInit {
     email: '',
     password: '',
   });
+  loginError = signal('');
 
   // Build the form and attach validation rules
   loginForm = form(this.loginModel, (schemaPath) => {
@@ -45,42 +46,59 @@ export class Login implements OnInit {
   ngOnInit(): void {
     const roleParam = this.route.snapshot.paramMap.get('role');
 
-    if (roleParam === 'teacher' || roleParam === 'student') {
+    if (roleParam === 'admin' || roleParam === 'teacher') {
       this.role = roleParam;
     } else {
-      this.role = 'student';
+      this.role = 'teacher';
     }
   }
 
   // Navigate depends on roles
   private async navigateByRole(): Promise<void> {
-    if (this.role === 'teacher') {
-      await this.router.navigate(['/dashboard/teacher']);
+    if (this.role === 'admin') {
+      await this.router.navigate(['/dashboard/admin'], { replaceUrl: true });
       return;
     }
 
-    await this.router.navigate(['/dashboard/student']);
+    await this.router.navigate(['/dashboard/teacher'], { replaceUrl: true });
+  }
+
+  // Login failure helper
+  private async failLogin(message: string): Promise<void> {
+    await this.authService.logout();
+    this.loginError.set(message);
   }
 
   // Handle form submission and navigate users
   onSubmit(event: Event) {
     event.preventDefault();
+
+    this.loginError.set('');
+
     submit(this.loginForm, {
       action: async () => {
-        const { email, password } = this.loginModel();
-        const user = await this.authService.login(email, password);
-        const profile = await this.userProfileService.getUserProfile(user.uid);
+        try {
+          const { email, password } = this.loginModel();
+          const user = await this.authService.login(email, password);
+          const profile = await this.userProfileService.getUserProfile(user.uid);
 
-        if (!profile) {
-          throw new Error('User profile not found.');
+          // Reject if profile is missing
+          if (!profile) {
+            await this.failLogin('User profile not found.');
+            return;
+          }
+
+          // Reject login on the wrong page
+          if (profile.role !== this.role) {
+            const correctPage = profile.role === 'admin' ? 'Admin' : 'Teacher';
+            await this.failLogin(`This account must sign in through the ${correctPage} login page.`);
+            return;
+          }
+
+          await this.navigateByRole();
+        } catch (error) {
+          await this.failLogin('Login failed. Please check your credentials and try again.');
         }
-
-        if (profile.role === 'teacher') {
-          await this.router.navigate(['/dashboard/teacher']);
-          return;
-        }
-
-        await this.router.navigate(['/dashboard/student']);
       },
     });
   }

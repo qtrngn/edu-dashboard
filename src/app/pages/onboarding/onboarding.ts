@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 
-export type Role = 'teacher' | 'student';
+export type Role = 'admin' | 'teacher';
 interface RoleCard {
   role: Role;
   title: string;
@@ -20,18 +20,18 @@ interface RoleCard {
 export class Onboarding {
   roleCards: RoleCard[] = [
     {
-      role: 'teacher',
-      title: 'Teacher',
+      role: 'admin',
+      title: 'Admin',
       subtitle: 'Continue →',
-      image: 'assets/images/onboarding/onboarding-teacher.gif',
+      image: 'assets/images/onboarding/onboarding-admin.gif',
       borderHover: 'hover:border-teal-300',
       textColor: 'text-teal-300',
     },
     {
-      role: 'student',
-      title: 'Student',
+      role: 'teacher',
+      title: 'Teacher',
       subtitle: 'Continue →',
-      image: 'assets/images/onboarding/onboarding-student.gif',
+      image: 'assets/images/onboarding/onboarding-teacher.gif',
       borderHover: 'hover:border-pink-400',
       textColor: 'text-pink-400',
     },

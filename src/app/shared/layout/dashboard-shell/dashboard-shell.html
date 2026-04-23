@@ -1,0 +1,35 @@
+<div class="min-h-screen">
+  <header class="flex flex-col items-start gap-4 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <div class="text-lg font-semibold tracking-wide sm:text-xl">Education</div>
+
+    <!-- Logout button -->
+    <button
+      type="button"
+      (click)="onLogoutClick()"
+      class="rounded-xl border border-white/10 bg-slate-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+    >
+      Logout
+    </button>
+  </header>
+
+ <section class="border-b border-white/10 px-4 py-5 sm:px-6 sm:py-6">
+  <div class="flex items-center justify-between gap-4">
+    <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">{{ title }}</h1>
+
+    <!-- Create button -->
+    @if (showCreateButton) {
+      <button
+        type="button"
+        (click)="onCreateClick()"
+        class="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-slate-700 text-xl font-semibold text-white transition hover:bg-white/10"
+      >
+        +
+      </button>
+    }
+  </div>
+</section>
+
+  <main class="px-4 py-5 sm:px-6 sm:py-6">
+    <ng-content></ng-content>
+  </main>
+</div>

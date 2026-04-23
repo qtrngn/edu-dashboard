@@ -51,9 +51,7 @@ export class Register implements OnInit {
     email(schemaPath.email, { message: 'Enter a valid email address' });
 
     required(schemaPath.password, { message: 'Password is required' });
-    minLength(schemaPath.password, 8, {
-      message: 'Password must be at least 8 characters',
-    });
+    minLength(schemaPath.password, 8, { message: 'Password must be at least 8 characters',});
 
     required(schemaPath.confirmPassword, {
       message: 'Please confirm your password',
@@ -87,21 +85,21 @@ export class Register implements OnInit {
   ngOnInit(): void {
     const roleParam = this.route.snapshot.paramMap.get('role');
 
-    if (roleParam === 'teacher' || roleParam === 'student') {
+    if (roleParam === 'admin' || roleParam === 'teacher') {
       this.role = roleParam;
     } else {
-      this.role = 'student';
+      this.role = 'teacher';
     }
   }
 
   // Navigate depends on roles
   private async navigateByRole(): Promise<void> {
-    if (this.role === 'teacher') {
-      await this.router.navigate(['/dashboard/teacher']);
+    if (this.role === 'admin') {
+      await this.router.navigate(['/dashboard/admin']);
       return;
     }
 
-    await this.router.navigate(['/dashboard/student']);
+    await this.router.navigate(['/dashboard/teacher']);
   }
 
   // Password toggle
