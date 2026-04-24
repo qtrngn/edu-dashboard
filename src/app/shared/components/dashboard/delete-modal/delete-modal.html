@@ -1,0 +1,25 @@
+<app-modal-shell [title]="title" (closeClicked)="onCancelClick()">
+  <div class="space-y-4">
+    <p class="text-sm text-slate-300">
+      Are you sure? This action cannot be undone.
+    </p>
+  </div>
+
+  <div class="mt-6 flex justify-end gap-3">
+    <button
+      type="button"
+      (click)="onCancelClick()"
+      class="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="button"
+      (click)="onConfirmClick()"
+      class="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-200 transition hover:bg-red-500/20"
+    >
+      Delete
+    </button>
+  </div>
+</app-modal-shell>

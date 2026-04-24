@@ -1,0 +1,48 @@
+<div class="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+  @if (users.length === 0) {
+    <div class="px-6 py-10 text-center text-sm text-slate-400">
+      No records found.
+    </div>
+  } @else {
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-white/10">
+        <thead class="bg-white/5">
+          <tr class="text-left">
+            <th class="px-6 py-4 text-sm font-medium text-slate-300">Name</th>
+
+            @if (users[0].type === 'teacher') {
+              <th class="px-6 py-4 text-sm font-medium text-slate-300">Teacher ID</th>
+              <th class="px-6 py-4 text-sm font-medium text-slate-300">Subject</th>
+              <th class="px-6 py-4 text-sm font-medium text-slate-300">School</th>
+            } @else {
+              <th class="px-6 py-4 text-sm font-medium text-slate-300">Student ID</th>
+              <th class="px-6 py-4 text-sm font-medium text-slate-300">Grade</th>
+              <th class="px-6 py-4 text-sm font-medium text-slate-300">School</th>
+            }
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-white/10">
+          @for (user of users; track user.id) {
+            <tr
+              (click)="onRowClick(user)"
+              class="cursor-pointer transition hover:bg-white/5"
+            >
+              <td class="px-6 py-4 text-sm font-medium text-white">{{ user.name }}</td>
+
+              @if (user.type === 'teacher') {
+                <td class="px-6 py-4 text-sm text-slate-300">{{ user.teacherId }}</td>
+                <td class="px-6 py-4 text-sm text-slate-300">{{ user.subject }}</td>
+                <td class="px-6 py-4 text-sm text-slate-300">{{ user.school }}</td>
+              } @else {
+                <td class="px-6 py-4 text-sm text-slate-300">{{ user.studentId }}</td>
+                <td class="px-6 py-4 text-sm text-slate-300">{{ user.grade }}</td>
+                <td class="px-6 py-4 text-sm text-slate-300">{{ user.school }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

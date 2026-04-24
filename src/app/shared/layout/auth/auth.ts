@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import type { Role } from "../../../pages/onboarding/onboarding";
+import type { Role } from "@pages/onboarding/onboarding";
 
 @Component({
   selector: "app-auth",

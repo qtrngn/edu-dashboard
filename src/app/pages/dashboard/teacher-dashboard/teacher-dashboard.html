@@ -1,5 +1,3 @@
-<app-dashboard-shell title="Student Management" [showCreateButton]="true">
-  <div class="rounded-xl border border-white/10 bg-white/5 p-6">
-    Dashboard content goes here
-  </div>
+<app-dashboard-shell title="Student Management" (logoutClicked)="onLogoutClick()">
+  <app-user-management-dashboard mode="student"></app-user-management-dashboard>
 </app-dashboard-shell>

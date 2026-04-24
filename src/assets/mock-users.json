@@ -1,0 +1,166 @@
+{
+  "teachers": [
+    {
+      "type": "teacher",
+      "id": "t1",
+      "name": "John Carter",
+      "teacherId": "T-1001",
+      "subject": "Mathematics",
+      "school": "Northview High"
+    },
+    {
+      "type": "teacher",
+      "id": "t2",
+      "name": "Emily Stone",
+      "teacherId": "T-1002",
+      "subject": "Science",
+      "school": "Northview High"
+    },
+    {
+      "type": "teacher",
+      "id": "t3",
+      "name": "Michael Lee",
+      "teacherId": "T-1003",
+      "subject": "History",
+      "school": "Riverside Academy"
+    },
+    {
+      "type": "teacher",
+      "id": "t4",
+      "name": "Sarah Kim",
+      "teacherId": "T-1004",
+      "subject": "English",
+      "school": "Riverside Academy"
+    },
+    {
+      "type": "teacher",
+      "id": "t5",
+      "name": "David Nguyen",
+      "teacherId": "T-1005",
+      "subject": "Physics",
+      "school": "Maple Grove School"
+    },
+    {
+      "type": "teacher",
+      "id": "t6",
+      "name": "Rachel Adams",
+      "teacherId": "T-1006",
+      "subject": "Chemistry",
+      "school": "Maple Grove School"
+    },
+    {
+      "type": "teacher",
+      "id": "t7",
+      "name": "Daniel Brooks",
+      "teacherId": "T-1007",
+      "subject": "Geography",
+      "school": "Westfield Secondary"
+    },
+    {
+      "type": "teacher",
+      "id": "t8",
+      "name": "Olivia Turner",
+      "teacherId": "T-1008",
+      "subject": "Biology",
+      "school": "Westfield Secondary"
+    },
+    {
+      "type": "teacher",
+      "id": "t9",
+      "name": "Christopher Hall",
+      "teacherId": "T-1009",
+      "subject": "Computer Science",
+      "school": "Summit Preparatory"
+    },
+    {
+      "type": "teacher",
+      "id": "t10",
+      "name": "Megan Foster",
+      "teacherId": "T-1010",
+      "subject": "Art",
+      "school": "Summit Preparatory"
+    }
+  ],
+  "students": [
+    {
+      "type": "student",
+      "id": "s1",
+      "name": "Ava Wilson",
+      "studentId": "S-2001",
+      "grade": "10",
+      "school": "Northview High"
+    },
+    {
+      "type": "student",
+      "id": "s2",
+      "name": "Liam Brown",
+      "studentId": "S-2002",
+      "grade": "11",
+      "school": "Northview High"
+    },
+    {
+      "type": "student",
+      "id": "s3",
+      "name": "Sophia Martinez",
+      "studentId": "S-2003",
+      "grade": "9",
+      "school": "Riverside Academy"
+    },
+    {
+      "type": "student",
+      "id": "s4",
+      "name": "Noah Johnson",
+      "studentId": "S-2004",
+      "grade": "12",
+      "school": "Riverside Academy"
+    },
+    {
+      "type": "student",
+      "id": "s5",
+      "name": "Isabella Clark",
+      "studentId": "S-2005",
+      "grade": "10",
+      "school": "Maple Grove School"
+    },
+    {
+      "type": "student",
+      "id": "s6",
+      "name": "James Walker",
+      "studentId": "S-2006",
+      "grade": "11",
+      "school": "Maple Grove School"
+    },
+    {
+      "type": "student",
+      "id": "s7",
+      "name": "Mia Rodriguez",
+      "studentId": "S-2007",
+      "grade": "8",
+      "school": "Westfield Secondary"
+    },
+    {
+      "type": "student",
+      "id": "s8",
+      "name": "Benjamin Scott",
+      "studentId": "S-2008",
+      "grade": "9",
+      "school": "Westfield Secondary"
+    },
+    {
+      "type": "student",
+      "id": "s9",
+      "name": "Charlotte Green",
+      "studentId": "S-2009",
+      "grade": "12",
+      "school": "Summit Preparatory"
+    },
+    {
+      "type": "student",
+      "id": "s10",
+      "name": "Elijah Baker",
+      "studentId": "S-2010",
+      "grade": "10",
+      "school": "Summit Preparatory"
+    }
+  ]
+}

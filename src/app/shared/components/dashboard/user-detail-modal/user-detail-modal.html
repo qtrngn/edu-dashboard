@@ -1,0 +1,173 @@
+<app-modal-shell
+  [title]="user.type === 'teacher' ? 'Teacher Details' : 'Student Details'"
+  (closeClicked)="onCloseClick()"
+>
+  <div class="space-y-4">
+    @if (!isEditing) {
+      @if (user.type === 'teacher') {
+        <div class="space-y-3">
+          <div>
+            <p class="text-sm text-slate-400">Name</p>
+            <p class="text-white">{{ user.name }}</p>
+          </div>
+
+          <div>
+            <p class="text-sm text-slate-400">Teacher ID</p>
+            <p class="text-white">{{ user.teacherId }}</p>
+          </div>
+
+          <div>
+            <p class="text-sm text-slate-400">Subject</p>
+            <p class="text-white">{{ user.subject }}</p>
+          </div>
+
+          <div>
+            <p class="text-sm text-slate-400">School</p>
+            <p class="text-white">{{ user.school }}</p>
+          </div>
+        </div>
+      } @else {
+        <div class="space-y-3">
+          <div>
+            <p class="text-sm text-slate-400">Name</p>
+            <p class="text-white">{{ user.name }}</p>
+          </div>
+
+          <div>
+            <p class="text-sm text-slate-400">Student ID</p>
+            <p class="text-white">{{ user.studentId }}</p>
+          </div>
+
+          <div>
+            <p class="text-sm text-slate-400">Grade</p>
+            <p class="text-white">{{ user.grade }}</p>
+          </div>
+
+          <div>
+            <p class="text-sm text-slate-400">School</p>
+            <p class="text-white">{{ user.school }}</p>
+          </div>
+        </div>
+      }
+    } @else {
+
+      @if (user.type === 'teacher') {
+        <div class="space-y-2">
+          <label class="text-sm text-slate-300">Name</label>
+          <input
+            type="text"
+            [value]="teacherForm().name"
+            (input)="onTeacherFieldChange('name', $any($event.target).value)"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm text-slate-300">Teacher ID</label>
+          <input
+            type="text"
+            [value]="teacherForm().teacherId"
+            (input)="onTeacherFieldChange('teacherId', $any($event.target).value)"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm text-slate-300">Subject</label>
+          <input
+            type="text"
+            [value]="teacherForm().subject"
+            (input)="onTeacherFieldChange('subject', $any($event.target).value)"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm text-slate-300">School</label>
+          <input
+            type="text"
+            [value]="teacherForm().school"
+            (input)="onTeacherFieldChange('school', $any($event.target).value)"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+      } @else {
+        <div class="space-y-2">
+          <label class="text-sm text-slate-300">Name</label>
+          <input
+            type="text"
+            [value]="studentForm().name"
+            (input)="onStudentFieldChange('name', $any($event.target).value)"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm text-slate-300">Student ID</label>
+          <input
+            type="text"
+            [value]="studentForm().studentId"
+            (input)="onStudentFieldChange('studentId', $any($event.target).value)"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm text-slate-300">Grade</label>
+          <input
+            type="text"
+            [value]="studentForm().grade"
+            (input)="onStudentFieldChange('grade', $any($event.target).value)"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm text-slate-300">School</label>
+          <input
+            type="text"
+            [value]="studentForm().school"
+            (input)="onStudentFieldChange('school', $any($event.target).value)"
+            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+      }
+    }
+  </div>
+
+  <div class="mt-6 flex justify-end gap-3">
+    @if (!isEditing) {
+      <button
+        type="button"
+        (click)="onDeleteClick()"
+        class="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-200 transition hover:bg-red-500/20"
+      >
+        Delete
+      </button>
+
+      <button
+        type="button"
+        (click)="onEditClick()"
+        class="rounded-xl border border-white/10 bg-slate-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+      >
+        Edit
+      </button>
+    } @else {
+      <button
+        type="button"
+        (click)="onCancelEditClick()"
+        class="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        (click)="onSaveClick()"
+        class="rounded-xl border border-white/10 bg-slate-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+      >
+        Save
+      </button>
+    }
+  </div>
+</app-modal-shell>
