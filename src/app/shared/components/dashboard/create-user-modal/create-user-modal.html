@@ -2,97 +2,11 @@
   [title]="mode === 'teacher' ? 'Add Teacher' : 'Add Student'"
   (closeClicked)="onCloseClick()"
 >
-  <div class="space-y-4">
-    @if (mode === 'teacher') {
-      <div class="space-y-2">
-        <label class="text-sm text-slate-300">Name</label>
-        <input
-          type="text"
-          [value]="teacherForm().name"
-          (input)="onTeacherFieldChange('name', $any($event.target).value)"
-          class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-          placeholder="Enter teacher name"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-sm text-slate-300">Teacher ID</label>
-        <input
-          type="text"
-          [value]="teacherForm().teacherId"
-          (input)="onTeacherFieldChange('teacherId', $any($event.target).value)"
-          class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-          placeholder="Enter teacher ID"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-sm text-slate-300">Subject</label>
-        <input
-          type="text"
-          [value]="teacherForm().subject"
-          (input)="onTeacherFieldChange('subject', $any($event.target).value)"
-          class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-          placeholder="Enter subject"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-sm text-slate-300">School</label>
-        <input
-          type="text"
-          [value]="teacherForm().school"
-          (input)="onTeacherFieldChange('school', $any($event.target).value)"
-          class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-          placeholder="Enter school"
-        />
-      </div>
-    } @else {
-      <div class="space-y-2">
-        <label class="text-sm text-slate-300">Name</label>
-        <input
-          type="text"
-          [value]="studentForm().name"
-          (input)="onStudentFieldChange('name', $any($event.target).value)"
-          class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-          placeholder="Enter student name"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-sm text-slate-300">Student ID</label>
-        <input
-          type="text"
-          [value]="studentForm().studentId"
-          (input)="onStudentFieldChange('studentId', $any($event.target).value)"
-          class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-          placeholder="Enter student ID"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-sm text-slate-300">Grade</label>
-        <input
-          type="text"
-          [value]="studentForm().grade"
-          (input)="onStudentFieldChange('grade', $any($event.target).value)"
-          class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-          placeholder="Enter grade"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-sm text-slate-300">School</label>
-        <input
-          type="text"
-          [value]="studentForm().school"
-          (input)="onStudentFieldChange('school', $any($event.target).value)"
-          class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
-          placeholder="Enter school"
-        />
-      </div>
-    }
-  </div>
+  <app-user-form-fields
+    [mode]="mode"
+    [value]="form()"
+    (valueChange)="onFormChange($event)"
+  ></app-user-form-fields>
 
   <div class="mt-6 flex justify-end gap-3">
     <button

@@ -17,15 +17,17 @@ interface MockUsersData {
   providedIn: 'root',
 })
 export class UserDirectoryService {
-  // Step 1: define the localStorage key for the fake database
+  // localStorage key 
   private readonly storageKey = 'education-dashboard-users';
 
-  // Step 2: define where JSON file lives
+  // Initialize localStorage the first time.
   private readonly seedPath = 'assets/mock-users.json';
 
   constructor(private readonly http: HttpClient) {}
 
-  // Step 3: initialize localStorage from the JSON seed only once
+  // Makes sure the mock user store exists before reading or updating data.
+  // If localStorage already has data, it keeps that data.
+  // If localStorage is empty, it loads the starter data from mock-users.json.
   async initializeStore(): Promise<void> {
     const existingStore = this.readStore();
 
@@ -37,19 +39,19 @@ export class UserDirectoryService {
     this.writeStore(seedData);
   }
 
-  // Step 4: read all teachers from the fake database
+  // Returns all teachers from the mock data.
   async getTeachers(): Promise<TeacherRow[]> {
     await this.initializeStore();
     return this.readStoreOrThrow().teachers;
   }
 
-  // Step 5: read all students from the fake database
+  // Returns all students from the mock data.
   async getStudents(): Promise<StudentRow[]> {
     await this.initializeStore();
     return this.readStoreOrThrow().students;
   }
 
-  // Step 6: create a teacher row, save it into localStorage, then return it
+  // Creates a new teacher row, saves it into the mock data, then returns the newly created teacher.
   async createTeacher(input: CreateTeacherInput): Promise<TeacherRow> {
     const newTeacher = this.buildTeacherRow(input);
 
@@ -61,7 +63,7 @@ export class UserDirectoryService {
     return newTeacher;
   }
 
-  // Step 7: create a student row, save it into localStorage, then return it
+  // Creates a new student row, saves it into the mock store, then returns the newly created student.
   async createStudent(input: CreateStudentInput): Promise<StudentRow> {
     const newStudent = this.buildStudentRow(input);
 
@@ -73,7 +75,7 @@ export class UserDirectoryService {
     return newStudent;
   }
 
-  // Step 8: update one teacher row by matching the id
+  // Replaces the matching teacher in the mock store with the updated teacher.
   async updateTeacher(updatedTeacher: TeacherRow): Promise<TeacherRow> {
     await this.updateStore((store) => ({
       ...store,
@@ -85,7 +87,7 @@ export class UserDirectoryService {
     return updatedTeacher;
   }
 
-  // Step 9: update one student row by matching the id
+  // Replaces the matching student in the mock store with the updated student.
   async updateStudent(updatedStudent: StudentRow): Promise<StudentRow> {
     await this.updateStore((store) => ({
       ...store,
@@ -97,40 +99,43 @@ export class UserDirectoryService {
     return updatedStudent;
   }
 
-  // Step 10: delete one teacher row by filtering out the matching id
-  async deleteTeacher(teacherId: string): Promise<void> {
+  // Deletes a teacher by the internal row id.
+  async deleteTeacher(userId: string): Promise<void> {
     await this.updateStore((store) => ({
       ...store,
-      teachers: store.teachers.filter((teacher) => teacher.id !== teacherId),
+      teachers: store.teachers.filter((teacher) => teacher.id !== userId),
     }));
   }
 
-  // Step 11: delete one student row by filtering out the matching id
-  async deleteStudent(studentId: string): Promise<void> {
+  // Deletes a student by the internal row id.
+  // This is the generated `id`, not the student's `studentId`.
+  async deleteStudent(userId: string): Promise<void> {
     await this.updateStore((store) => ({
       ...store,
-      students: store.students.filter((student) => student.id !== studentId),
+      students: store.students.filter((student) => student.id !== userId),
     }));
   }
 
-  // Step 12: reset localStorage back to the original JSON seed data
+  // Resets localStorage back to the original mock data.
   async resetToSeed(): Promise<void> {
     const seedData = await this.loadSeedData();
     this.writeStore(seedData);
   }
 
-  // Step 13: centralize the repeated "read -> change -> write" pattern
-  private async updateStore(
-    updater: (store: MockUsersData) => MockUsersData,
-  ): Promise<void> {
+  /* 1. Make sure the store exists
+  2. Read the current store
+  3. Apply a change
+  4. Save the updated store back to localStorage */
+  private async updateStore(updater: (store: MockUsersData) => MockUsersData): Promise<void> {
     await this.initializeStore();
 
     const currentStore = this.readStoreOrThrow();
     const updatedStore = updater(currentStore);
+
     this.writeStore(updatedStore);
   }
 
-  // Step 14: build a clean teacher row object from create form input
+  // Converts the create-teacher form input into a full TeacherRow. The form does not provide `id`, so create id here.
   private buildTeacherRow(input: CreateTeacherInput): TeacherRow {
     return {
       type: 'teacher',
@@ -142,7 +147,7 @@ export class UserDirectoryService {
     };
   }
 
-  // Step 15: build a clean student row object from create form input
+  // Converts the create-student form input into a full StudentRow.
   private buildStudentRow(input: CreateStudentInput): StudentRow {
     return {
       type: 'student',
@@ -154,20 +159,19 @@ export class UserDirectoryService {
     };
   }
 
-  // Step 16: load the starter dataset 
+  // Loads the starter mock data
   private async loadSeedData(): Promise<MockUsersData> {
-    const seedData = await firstValueFrom(
-      this.http.get<MockUsersData>(this.seedPath),
-    );
+    const seedData = await firstValueFrom(this.http.get<MockUsersData>(this.seedPath));
 
     if (!seedData) {
-      throw new Error('Failed to load mock user seed data.');
+      throw new Error('Failed to load mock users seed data.');
     }
 
     return seedData;
   }
 
-  // Step 17: read the current  database from localStorage
+  /* Reads the saved mock users from localStorage.
+  Returns null if no store exists yet or if the saved JSON is broken. */
   private readStore(): MockUsersData | null {
     const rawStore = localStorage.getItem(this.storageKey);
 
@@ -182,18 +186,20 @@ export class UserDirectoryService {
     }
   }
 
-  // Step 18: same as readStore, but throw if store is missing
+  // expects the store to exist
   private readStoreOrThrow(): MockUsersData {
     const store = this.readStore();
 
     if (!store) {
-      throw new Error('User directory store is not initialized.');
+      throw new Error(
+        'Mock users store is missing. Initialize the store before accessing user data.',
+      );
     }
 
     return store;
   }
 
-  // Step 19: write the latest fake database back into localStorage
+  // Saves the full mock user store back into localStorage.
   private writeStore(store: MockUsersData): void {
     localStorage.setItem(this.storageKey, JSON.stringify(store));
   }

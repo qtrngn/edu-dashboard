@@ -37,3 +37,5 @@ export interface CreateStudentInput {
 }
 
 export type CreateUserInput = CreateTeacherInput | CreateStudentInput;
+
+export type UserFormValue = Record<string, string>;

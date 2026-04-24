@@ -7,7 +7,9 @@ import { UserDirectoryService } from '@service/user-directory.service';
 import type {
   DashboardMode,
   UserRow,
-  CreateUserInput, TeacherRow, StudentRow
+  CreateUserInput,
+  TeacherRow,
+  StudentRow,
 } from '@pages/dashboard/types/user-management.types';
 
 @Component({
@@ -99,24 +101,24 @@ export class UserManagementDashboard implements OnInit {
   }
 
   async handleDetailSave(updatedUser: UserRow): Promise<void> {
-  this.isLoading.set(true);
+    this.isLoading.set(true);
 
-  try {
-    const savedUser =
-      updatedUser.type === 'teacher'
-        ? await this.userDirectoryService.updateTeacher(updatedUser as TeacherRow)
-        : await this.userDirectoryService.updateStudent(updatedUser as StudentRow);
+    try {
+      const savedUser =
+        updatedUser.type === 'teacher'
+          ? await this.userDirectoryService.updateTeacher(updatedUser as TeacherRow)
+          : await this.userDirectoryService.updateStudent(updatedUser as StudentRow);
 
-    this.users.update((current) =>
-      current.map((user) => (user.id === savedUser.id ? savedUser : user)),
-    );
+      this.users.update((current) =>
+        current.map((user) => (user.id === savedUser.id ? savedUser : user)),
+      );
 
-    this.selectedUser.set(savedUser);
-    this.stopEditingSelectedUser();
-  } finally {
-    this.isLoading.set(false);
+      this.selectedUser.set(savedUser);
+      this.stopEditingSelectedUser();
+    } finally {
+      this.isLoading.set(false);
+    }
   }
-}
 
   // Delete confirm modal
   openDeleteConfirm(): void {
@@ -129,25 +131,25 @@ export class UserManagementDashboard implements OnInit {
   }
 
   async handleDeleteConfirm(): Promise<void> {
-  const user = this.selectedUser();
+    const user = this.selectedUser();
 
-  if (!user) return;
+    if (!user) return;
 
-  this.isLoading.set(true);
+    this.isLoading.set(true);
 
-  try {
-    if (user.type === 'teacher') {
-      await this.userDirectoryService.deleteTeacher(user.id);
-    } else {
-      await this.userDirectoryService.deleteStudent(user.id);
+    try {
+      if (user.type === 'teacher') {
+        await this.userDirectoryService.deleteTeacher(user.id);
+      } else {
+        await this.userDirectoryService.deleteStudent(user.id);
+      }
+
+      this.users.update((current) => current.filter((row) => row.id !== user.id));
+
+      this.closeDeleteConfirm();
+      this.closeDetailModal();
+    } finally {
+      this.isLoading.set(false);
     }
-
-    this.users.update((current) => current.filter((row) => row.id !== user.id));
-
-    this.closeDeleteConfirm();
-    this.closeDetailModal();
-  } finally {
-    this.isLoading.set(false);
   }
-}
 }

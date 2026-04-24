@@ -1,135 +1,133 @@
-import { Component, EventEmitter, Input, Output, signal, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal, OnChanges, SimpleChanges } from '@angular/core';
 import { ModalShell } from '@shared/components/modal-shell/modal-shell';
-import type { TeacherRow, StudentRow, UserRow } from '@pages/dashboard/types/user-management.types';
+import { UserFormFields } from '@shared/components/dashboard/user-form-fields/user-form-fields';
+import type {
+  TeacherRow,
+  StudentRow,
+  UserRow,
+  UserFormValue,
+} from '@pages/dashboard/types/user-management.types';
+
+interface UserDetailField {
+  label: string;
+  value: string;
+}
 
 @Component({
   selector: 'app-user-detail-modal',
-  imports: [ModalShell],
+  imports: [ModalShell, UserFormFields],
   templateUrl: './user-detail-modal.html',
 })
-export class UserDetailModal {
-  // Step 1: receive the selected user from the parent dashboard
+export class UserDetailModal implements OnChanges {
   @Input({ required: true }) user!: UserRow;
-
-  // Step 2: receive whether this modal is currently in edit mode
   @Input() isEditing = false;
 
-  // Step 3: output events back to the parent
   @Output() closeClicked = new EventEmitter<void>();
   @Output() editClicked = new EventEmitter<void>();
   @Output() cancelEditClicked = new EventEmitter<void>();
   @Output() saveClicked = new EventEmitter<UserRow>();
   @Output() deleteClicked = new EventEmitter<void>();
 
-  // Step 4: keep local teacher form state for edit mode
-  readonly teacherForm = signal({
-    name: '',
-    teacherId: '',
-    subject: '',
-    school: '',
-  });
+  readonly form = signal<UserFormValue>({});
 
-  // Step 5: keep local student form state for edit mode
-  readonly studentForm = signal({
-    name: '',
-    studentId: '',
-    grade: '',
-    school: '',
-  });
+  get detailFields(): UserDetailField[] {
+    if (this.user.type === 'teacher') {
+      return [
+        { label: 'Name', value: this.user.name },
+        { label: 'Teacher ID', value: this.user.teacherId },
+        { label: 'Subject', value: this.user.subject },
+        { label: 'School', value: this.user.school },
+      ];
+    }
 
-  // Step 6: whenever the selected user changes, sync the local form state
+    return [
+      { label: 'Name', value: this.user.name },
+      { label: 'Student ID', value: this.user.studentId },
+      { label: 'Grade', value: this.user.grade },
+      { label: 'School', value: this.user.school },
+    ];
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['user'] && this.user) {
       this.syncFormFromUser();
     }
   }
 
-  // Step 7: close the modal
   onCloseClick(): void {
     this.closeClicked.emit();
   }
 
-  // Step 8: tell the parent to switch into edit mode
   onEditClick(): void {
     this.editClicked.emit();
   }
 
-  // Step 9: reset the form back to the original user values, then exit edit mode
+  // Reset the form back to the original user data
   onCancelEditClick(): void {
     this.syncFormFromUser();
     this.cancelEditClicked.emit();
   }
 
-  // Step 10: tell the parent that delete was requested
   onDeleteClick(): void {
     this.deleteClicked.emit();
   }
 
-  // Step 11: update one teacher field while editing
-  onTeacherFieldChange(field: 'name' | 'teacherId' | 'subject' | 'school', value: string): void {
-    this.teacherForm.update((current) => ({
-      ...current,
-      [field]: value,
-    }));
+  onFormChange(updatedForm: UserFormValue): void {
+    this.form.set(updatedForm);
   }
 
-  // Step 12: update one student field while editing
-  onStudentFieldChange(field: 'name' | 'studentId' | 'grade' | 'school', value: string): void {
-    this.studentForm.update((current) => ({
-      ...current,
-      [field]: value,
-    }));
-  }
-
-  // Step 13: build the updated row and emit it back to the parent
+  // Build the updated user object sent to the parent
   onSaveClick(): void {
-    if (this.user.type === 'teacher') {
-      const form = this.teacherForm();
+    const form = this.form();
 
+    if (this.user.type === 'teacher') {
       const updatedTeacher: TeacherRow = {
         ...this.user,
         type: 'teacher',
-        name: form.name.trim(),
-        teacherId: form.teacherId.trim(),
-        subject: form.subject.trim(),
-        school: form.school.trim(),
+        name: this.trimValue(form, 'name'),
+        teacherId: this.trimValue(form, 'teacherId'),
+        subject: this.trimValue(form, 'subject'),
+        school: this.trimValue(form, 'school'),
       };
 
       this.saveClicked.emit(updatedTeacher);
       return;
     }
 
-    const form = this.studentForm();
-
     const updatedStudent: StudentRow = {
       ...this.user,
       type: 'student',
-      name: form.name.trim(),
-      studentId: form.studentId.trim(),
-      grade: form.grade.trim(),
-      school: form.school.trim(),
+      name: this.trimValue(form, 'name'),
+      studentId: this.trimValue(form, 'studentId'),
+      grade: this.trimValue(form, 'grade'),
+      school: this.trimValue(form, 'school'),
     };
 
     this.saveClicked.emit(updatedStudent);
   }
 
-  // Step 14: copy the selected user into the correct local form state
+  // Fill the form with the selected user's current data
   private syncFormFromUser(): void {
     if (this.user.type === 'teacher') {
-      this.teacherForm.set({
+      this.form.set({
         name: this.user.name,
         teacherId: this.user.teacherId,
         subject: this.user.subject,
         school: this.user.school,
       });
+
       return;
     }
 
-    this.studentForm.set({
+    this.form.set({
       name: this.user.name,
       studentId: this.user.studentId,
       grade: this.user.grade,
       school: this.user.school,
     });
+  }
+
+  private trimValue(form: UserFormValue, field: string): string {
+    return (form[field] ?? '').trim();
   }
 }
