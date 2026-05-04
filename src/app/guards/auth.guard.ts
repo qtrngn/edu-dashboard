@@ -21,5 +21,5 @@ export const authGuard: CanActivateFn = async () => {
         return true;
     }
     // If not => fall back to onboarding page
-    return router.createUrlTree(['/onboarding']);
+    return router.createUrlTree(['/']);
 }

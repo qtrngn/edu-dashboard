@@ -1,0 +1,57 @@
+<section class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-white">
+        {{ displayConfig.pluralLabel }}
+      </h1>
+
+      <p class="mt-1 text-sm text-slate-400">
+        Manage {{ displayConfig.pluralLabel.toLowerCase() }}
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="openCreateModal()"
+      class="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-slate-700 text-xl font-semibold text-white transition hover:bg-white/10"
+      [title]="displayConfig.addTitle"
+    >
+      +
+    </button>
+  </div>
+
+  <app-user-table
+    [users]="users()"
+    [managedUserType]="managedUserType"
+    [emptyMessage]="displayConfig.emptyMessage"
+    (rowClicked)="openDetailModal($event)"
+  ></app-user-table>
+
+  @if (isCreateModalOpen()) {
+    <app-create-user-modal
+      [managedUserType]="managedUserType"
+      (closeClicked)="closeCreateModal()"
+      (saveClicked)="handleCreateSave($event)"
+    ></app-create-user-modal>
+  }
+
+  @if (isDetailModalOpen() && selectedUser()) {
+    <app-user-detail-modal
+      [user]="selectedUser()!"
+      [isEditing]="isEditingSelectedUser()"
+      (closeClicked)="closeDetailModal()"
+      (editClicked)="startEditingSelectedUser()"
+      (cancelEditClicked)="stopEditingSelectedUser()"
+      (saveClicked)="handleDetailSave($event)"
+      (deleteClicked)="openDeleteConfirm()"
+    ></app-user-detail-modal>
+  }
+
+  @if (isDeleteConfirmOpen()) {
+    <app-delete-modal
+      [title]="displayConfig.deleteTitle"
+      (cancelClicked)="closeDeleteConfirm()"
+      (confirmClicked)="handleDeleteConfirm()"
+    ></app-delete-modal>
+  }
+</section>

@@ -1,0 +1,12 @@
+<app-modal-base
+  [config]="modalConfig"
+  (closeClicked)="onCloseClick()"
+  (actionClicked)="onModalAction($event)"
+>
+  <app-user-form-fields
+    [fields]="fields"
+    [value]="form()"
+    [mode]="fieldMode"
+    (valueChange)="onFormChange($event)"
+  />
+</app-modal-base>

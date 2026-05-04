@@ -6,7 +6,8 @@ import type {
   CreateTeacherInput,
   StudentRow,
   TeacherRow,
-} from '@pages/dashboard/types/user-management.types';
+} from '@app/types/user-management.types';
+import { EManagedUserType } from '@enums/user-management.enum';
 
 interface MockUsersData {
   teachers: TeacherRow[];
@@ -17,13 +18,16 @@ interface MockUsersData {
   providedIn: 'root',
 })
 export class UserDirectoryService {
-  // localStorage key 
+  // localStorage key
   private readonly storageKey = 'education-dashboard-users';
 
   // Initialize localStorage the first time.
   private readonly seedPath = 'assets/mock-users.json';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {
+    console.log('UserDirectoryService created');
+    console.log('HttpClient:', this.http);
+  }
 
   // Makes sure the mock user store exists before reading or updating data.
   // If localStorage already has data, it keeps that data.
@@ -138,7 +142,7 @@ export class UserDirectoryService {
   // Converts the create-teacher form input into a full TeacherRow. The form does not provide `id`, so create id here.
   private buildTeacherRow(input: CreateTeacherInput): TeacherRow {
     return {
-      type: 'teacher',
+      type: EManagedUserType.Teacher,
       id: crypto.randomUUID(),
       name: input.name.trim(),
       teacherId: input.teacherId.trim(),
@@ -150,7 +154,7 @@ export class UserDirectoryService {
   // Converts the create-student form input into a full StudentRow.
   private buildStudentRow(input: CreateStudentInput): StudentRow {
     return {
-      type: 'student',
+      type: EManagedUserType.Student,
       id: crypto.randomUUID(),
       name: input.name.trim(),
       studentId: input.studentId.trim(),
@@ -161,6 +165,7 @@ export class UserDirectoryService {
 
   // Loads the starter mock data
   private async loadSeedData(): Promise<MockUsersData> {
+    console.log('Loading seed data from mock-users.json');
     const seedData = await firstValueFrom(this.http.get<MockUsersData>(this.seedPath));
 
     if (!seedData) {

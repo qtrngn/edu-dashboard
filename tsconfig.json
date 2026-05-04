@@ -19,7 +19,10 @@
       "@pages/*": ["./src/app/pages/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@environments/*": ["./src/environments/*"],
-      "@service/*": ["./src/app/service/*"]
+      "@service/*": ["./src/app/service/*"],
+      "@enums/*": ["./src/app/enums/*"],
+      "@configs/*": ["./src/app/configs/*"],
+      "@features/*": ["./src/app/features/*"],
     }
   },
   "angularCompilerOptions": {

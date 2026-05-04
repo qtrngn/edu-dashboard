@@ -1,0 +1,17 @@
+<!-- TODO: Currently only need text, add extra mode later when needed -->
+@switch (field.type) {
+  @case ('text') {
+    <app-field-text
+      [field]="field"
+      [value]="value"
+      [mode]="mode"
+      (valueChange)="handleValueChange($event)"
+    />
+  }
+
+  @default {
+    <p class="text-sm text-red-500">
+      Unsupported field type: {{ field.type }}
+    </p>
+  }
+} 

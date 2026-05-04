@@ -1,0 +1,17 @@
+<div class="space-y-1">
+  <label class="block py-2 text-sm font-medium text-slate-300">
+    {{ field.label }}
+
+    @if (field.required && !isViewMode) {
+      <span class="text-red-400">*</span>
+    }
+  </label>
+
+  @if (isViewMode) {
+    <p class="min-h-10 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
+      {{ displayValue }}
+    </p>
+  } @else {
+    <ng-content />
+  }
+</div>
