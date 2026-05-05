@@ -9,4 +9,18 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('edu-dashboard');
+
+
+  // todo
+  // openModal() {
+  //   modalService.openModal(configs);
+  // }
+
+  // -------------------
+  // create Modal Service: in Modal Service, create handle funtions
+  // openModal(configs: IConfigs) {
+    // handle load components (form/text/image...) to modal body
+    // research from modalService in wellbytes crm
+  // }
+
 }

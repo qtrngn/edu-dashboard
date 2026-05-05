@@ -28,6 +28,8 @@ export class ModalBase {
   }
 
   onCloseClick(): void {
+    // todo: must destroy component after close
+
     this.closeClicked.emit();
   }
 
