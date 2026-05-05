@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, OnDestroy } from '@angular/core';
 import {
   User,
   createUserWithEmailAndPassword,
@@ -12,16 +12,23 @@ import { FirebaseService } from './firebase.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
   readonly user = signal<User | null>(null);
   readonly isAuthReady = signal(false);
 
+  private readonly unsubscribeAuthState: () => void;
+
   // Start listening to Firebase auth state and sync it into local signals.
+
   constructor(private readonly firebaseService: FirebaseService) {
-    onAuthStateChanged(this.firebaseService.auth, (user) => {
+    this.unsubscribeAuthState = onAuthStateChanged(this.firebaseService.auth, (user) => {
       this.user.set(user);
       this.isAuthReady.set(true);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribeAuthState();
   }
 
   // Register new user
