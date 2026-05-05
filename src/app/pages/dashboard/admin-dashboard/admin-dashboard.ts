@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { DashboardShell } from '@shared/layout/dashboard-shell/dashboard-shell';
 import { UserManagementDashboard } from '@features/user-management-dashboard/user-management-dashboard';
 import { AuthService } from '@service/auth.service';
-import { EManagedUserType } from '@enums/user-management.enum';
+import { AuthNavigationService } from '@service/auth-navigation.service';
+import { EAuthRole } from '@enums/user-management.enum';
+import { getAuthRoleConfig } from '@configs/auth-role.config';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -11,14 +12,18 @@ import { EManagedUserType } from '@enums/user-management.enum';
   templateUrl: './admin-dashboard.html',
 })
 export class AdminDashboard {
-  readonly managedUserType = EManagedUserType.Teacher;
+  private readonly roleConfig = getAuthRoleConfig(EAuthRole.Admin);
+
+  readonly managedUserType = this.roleConfig.managedUserType;
+  readonly dashboardTitle = this.roleConfig.dashboardTitle;
+
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router,
+    private readonly authNavigationService: AuthNavigationService,
   ) {}
 
   async onLogoutClick(): Promise<void> {
     await this.authService.logout();
-    await this.router.navigate(['/login/admin'], { replaceUrl: true });
+    await this.authNavigationService.navigateToLogin(EAuthRole.Admin);
   }
 }

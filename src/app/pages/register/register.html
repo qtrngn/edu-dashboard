@@ -1,124 +1,128 @@
 <app-auth
   [role]="role"
-  [panelLabel]="role === 'admin' ? 'Admin' : 'Teacher'"
-  [panelTitle]="
-    role === 'admin' ? 'Create account to manage teachers' : 'Create account to manage students'
-  "
+  [panelLabel]="roleConfig.label"
+  [panelTitle]="roleConfig.registerPanelTitle"
 >
-  <!-- Header -->
-  <div class="mb-8 text-center">
-    <p class="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-fuchsia-400">Register</p>
-    <h2 class="text-4xl font-bold text-white">Create account</h2>
-  </div>
-
-  <!-- Form -->
-  <form (submit)="onSubmit($event)" class="space-y-5">
-    <!-- Username -->
-    <div>
-      <input
-        [formField]="registerForm.username"
-        type="text"
-        placeholder="Username"
-        class="auth-input"
-      />
-
-      @if (registerForm.username().touched() && registerForm.username().invalid()) {
-        <p class="auth-error">
-          {{ registerForm.username().errors()[0]?.message }}
-        </p>
-      }
-    </div>
-
-    <!-- Email -->
-    <div>
-      <input [formField]="registerForm.email" type="email" placeholder="Email" class="auth-input" />
-
-      @if (registerForm.email().touched() && registerForm.email().invalid()) {
-        <p class="auth-error">
-          {{ registerForm.email().errors()[0]?.message }}
-        </p>
-      }
-    </div>
-
-    <!-- Password -->
-    <div>
-      <div class="relative">
+  <app-auth-form-shell
+    [badgeLabel]="formConfig.badgeLabel"
+    [title]="formConfig.title"
+    [description]="formConfig.description"
+  >
+    <form form-body (submit)="onSubmit($event)" class="space-y-5">
+      <!-- Username -->
+      <div>
         <input
-          [formField]="registerForm.password"
-          [type]="showPassword() ? 'text' : 'password'"
-          placeholder="Password"
+          [formField]="registerForm.username"
+          type="text"
+          placeholder="Username"
           class="auth-input"
         />
 
-        <button
-          type="button"
-          (click)="togglePassword()"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-white"
-          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
-        >
-          @if (showPassword()) {
-            <svg lucideEye class="h-5 w-5"></svg>
-          } @else {
-            <svg lucideEyeOff class="h-5 w-5"></svg>
-          }
-        </button>
+        @if (registerForm.username().touched() && registerForm.username().invalid()) {
+          <p class="auth-error">
+            {{ registerForm.username().errors()[0]?.message }}
+          </p>
+        }
       </div>
 
-      @if (registerForm.password().touched() && registerForm.password().invalid()) {
-        <p class="auth-error">
-          {{ registerForm.password().errors()[0]?.message }}
-        </p>
-      }
-    </div>
-
-    <!-- Confirm Password -->
-    <div>
-      <div class="relative">
+      <!-- Email -->
+      <div>
         <input
-          [formField]="registerForm.confirmPassword"
-          [type]="showConfirmPassword() ? 'text' : 'password'"
-          placeholder="Confirm password"
+          [formField]="registerForm.email"
+          type="email"
+          placeholder="Email"
           class="auth-input"
         />
 
-        <!-- Show/Hide Toggle -->
-        <button
-          type="button"
-          (click)="toggleConfirmPassword()"
-          class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-white"
-          [attr.aria-label]="
-            showConfirmPassword() ? 'Hide confirm password' : 'Show confirm password'
-          "
-        >
-          @if (showConfirmPassword()) {
-            <svg lucideEye class="h-5 w-5"></svg>
-          } @else {
-            <svg lucideEyeOff class="h-5 w-5"></svg>
-          }
-        </button>
+        @if (registerForm.email().touched() && registerForm.email().invalid()) {
+          <p class="auth-error">
+            {{ registerForm.email().errors()[0]?.message }}
+          </p>
+        }
       </div>
 
-     
-      @if (registerForm.confirmPassword().touched() && registerForm.confirmPassword().invalid()) {
-        <p class="auth-error">
-          {{ registerForm.confirmPassword().errors()[0]?.message }}
+      <!-- Password -->
+      <div>
+        <div class="relative">
+          <input
+            [formField]="registerForm.password"
+            [type]="showPassword() ? 'text' : 'password'"
+            placeholder="Password"
+            class="auth-input"
+          />
+
+          <button
+            type="button"
+            (click)="togglePassword()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-white"
+            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+          >
+            @if (showPassword()) {
+              <svg lucideEye class="h-5 w-5"></svg>
+            } @else {
+              <svg lucideEyeOff class="h-5 w-5"></svg>
+            }
+          </button>
+        </div>
+
+        @if (registerForm.password().touched() && registerForm.password().invalid()) {
+          <p class="auth-error">
+            {{ registerForm.password().errors()[0]?.message }}
+          </p>
+        }
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <div class="relative">
+          <input
+            [formField]="registerForm.confirmPassword"
+            [type]="showConfirmPassword() ? 'text' : 'password'"
+            placeholder="Confirm password"
+            class="auth-input"
+          />
+
+          <button
+            type="button"
+            (click)="toggleConfirmPassword()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-white"
+            [attr.aria-label]="showConfirmPassword() ? 'Hide confirm password' : 'Show confirm password'"
+          >
+            @if (showConfirmPassword()) {
+              <svg lucideEye class="h-5 w-5"></svg>
+            } @else {
+              <svg lucideEyeOff class="h-5 w-5"></svg>
+            }
+          </button>
+        </div>
+
+        @if (registerForm.confirmPassword().touched() && registerForm.confirmPassword().invalid()) {
+          <p class="auth-error">
+            {{ registerForm.confirmPassword().errors()[0]?.message }}
+          </p>
+        }
+      </div>
+
+      @if (registerError()) {
+        <p class="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {{ registerError() }}
         </p>
       }
-    </div>
 
-    <!-- Submit Button -->
-    <button
-      type="submit"
-      [disabled]="!registerForm().valid() || registerForm().submitting()"
-      class="auth-button"
-    >
-      Create account
-    </button>
+      <button
+        type="submit"
+        [disabled]="!registerForm().valid() || registerForm().submitting()"
+        class="auth-button"
+      >
+        {{ formConfig.submitLabel }}
+      </button>
+    </form>
 
-    <!-- Login link -->
-    <p class="text-center text-sm text-slate-400">
-      Already have an account?
-      <a [routerLink]="['/login', role]" class="auth-link"> Log in </a>
+    <p form-footer class="text-center text-sm text-slate-400">
+      {{ formConfig.footerText }}
+      <a [routerLink]="roleConfig.loginPath" class="auth-link">
+        {{ formConfig.footerLinkLabel }}
+      </a>
     </p>
-  </form>
+  </app-auth-form-shell>
 </app-auth>

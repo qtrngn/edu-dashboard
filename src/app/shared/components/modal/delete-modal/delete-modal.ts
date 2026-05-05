@@ -16,28 +16,27 @@ export class DeleteModal {
   @Output() cancelClicked = new EventEmitter<void>();
   @Output() confirmClicked = new EventEmitter<void>();
 
-  get modalConfig(): BaseModalConfig {
-    return {
-      size: 'sm',
-      header: {
-        title: this.title,
-        description: this.message,
-        showCloseButton: true,
+ get modalConfig(): BaseModalConfig {
+  return {
+    size: 'sm',
+    header: {
+      title: this.title,
+      showCloseButton: true,
+    },
+    footerActions: [
+      {
+        label: this.cancelLabel,
+        action: 'cancel',
+        variant: 'secondary',
       },
-      footerActions: [
-        {
-          label: this.cancelLabel,
-          action: 'cancel',
-          variant: 'secondary',
-        },
-        {
-          label: this.confirmLabel,
-          action: 'confirm',
-          variant: 'destructive',
-        },
-      ],
-    };
-  }
+      {
+        label: this.confirmLabel,
+        action: 'confirm',
+        variant: 'destructive',
+      },
+    ],
+  };
+}
 
   onCancelClick(): void {
     this.cancelClicked.emit();

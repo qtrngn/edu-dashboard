@@ -1,25 +1,26 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { email, form, FormField, required, submit } from '@angular/forms/signals';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { form, FormField, submit } from '@angular/forms/signals';
 import { Auth } from '@shared/layout/auth/auth';
+import { AuthFormShell } from '@shared/layout/auth-form-shell/auth-form-shell';
 import { AuthService } from '@service/auth.service';
+import { AuthNavigationService } from '@service/auth-navigation.service';
 import { UserProfileService } from '@service/user-profile.service';
-import type { Role } from '@pages/onboarding/onboarding';
-
-interface LoginForm {
-  email: string;
-  password: string;
-}
+import { EAuthRole } from '@enums/user-management.enum';
+import { getAuthRoleConfig, isAuthRole } from '@configs/auth-role.config';
+import { applyLoginValidation } from '@configs/auth-validation.config';
+import { getAuthFormConfig, type AuthFormConfig } from '@configs/auth-form.config';
+import type { AuthRoleConfig, LoginForm } from '@app/types/auth.types';
 
 @Component({
   selector: 'app-login',
-  imports: [Auth, FormField, RouterLink],
+  imports: [Auth, AuthFormShell, FormField, RouterLink],
   templateUrl: './login.html',
   styleUrl: '../../shared/layout/auth/auth.css',
 })
 export class Login implements OnInit {
   // Store the current role from the URL
-  role!: Role;
+  role!: EAuthRole;
 
   // Hold the raw login form values
   loginModel = signal<LoginForm>({
@@ -30,37 +31,39 @@ export class Login implements OnInit {
 
   // Build the form and attach validation rules
   loginForm = form(this.loginModel, (schemaPath) => {
-    required(schemaPath.email, { message: 'Email is required' });
-    email(schemaPath.email, { message: 'Enter a valid email address' });
-    required(schemaPath.password, { message: 'Password is required' });
+    applyLoginValidation(schemaPath);
   });
+
   // Give this page access to the current route
   constructor(
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private userProfileService: UserProfileService,
-    private router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService,
+    private readonly userProfileService: UserProfileService,
+    private readonly authNavigationService: AuthNavigationService,
   ) {}
+
+  get roleConfig(): AuthRoleConfig {
+    return getAuthRoleConfig(this.role);
+  }
+
+  get formConfig(): AuthFormConfig {
+    return getAuthFormConfig('login');
+  }
 
   // Read the role parameter when the page loads
   ngOnInit(): void {
-    const roleParam = this.route.snapshot.paramMap.get('role');
-
-    if (roleParam === 'admin' || roleParam === 'teacher') {
-      this.role = roleParam;
-    } else {
-      this.role = 'teacher';
+    const role = this.authNavigationService.getRoleFromRoute(this.route);
+    if (role) {
+      this.role = role;
+      return;
     }
+
+    void this.authNavigationService.redirectToOnboarding();
   }
 
   // Navigate depends on roles
   private async navigateByRole(): Promise<void> {
-    if (this.role === 'admin') {
-      await this.router.navigate(['/dashboard/admin'], { replaceUrl: true });
-      return;
-    }
-
-    await this.router.navigate(['/dashboard/teacher'], { replaceUrl: true });
+    await this.authNavigationService.navigateToDashboard(this.role);
   }
 
   // Login failure helper
@@ -70,7 +73,7 @@ export class Login implements OnInit {
   }
 
   // Handle form submission and navigate users
-  onSubmit(event: Event) {
+  onSubmit(event: Event): void {
     event.preventDefault();
 
     this.loginError.set('');
@@ -90,11 +93,18 @@ export class Login implements OnInit {
 
           // Reject login on the wrong page
           if (profile.role !== this.role) {
-            const correctPage = profile.role === 'admin' ? 'Admin' : 'Teacher';
-            await this.failLogin(`This account must sign in through the ${correctPage} login page.`);
+            if (!isAuthRole(profile.role)) {
+              await this.failLogin('This account has an unsupported role.');
+              return;
+            }
+
+            const correctPage = getAuthRoleConfig(profile.role).label;
+
+            await this.failLogin(
+              `This account must sign in through the ${correctPage} login page.`,
+            );
             return;
           }
-
           await this.navigateByRole();
         } catch (error) {
           await this.failLogin('Login failed. Please check your credentials and try again.');

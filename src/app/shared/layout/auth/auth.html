@@ -1,9 +1,7 @@
-<section class="min-h-screen lg:grid lg:grid-cols-2">
+<section class="min-h-screen w-full lg:grid lg:grid-cols-2">
   <!-- Left Side -->
   <div
-    class="relative hidden min-h-screen overflow-hidden lg:block"
-    [class.bg-sky-50]="role === 'admin'"
-    [class.bg-emerald-50]="role === 'teacher'"
+    class="relative hidden min-h-screen overflow-hidden lg:block {{ roleConfig.authPanelBgClass }}"
   >
     <div class="flex h-full flex-col justify-between px-10 py-8 text-slate-900">
       <!-- Logo -->
@@ -26,12 +24,8 @@
     </div>
   </div>
 
-  <!-- Right Side / Login Form -->
-  <div class="flex min-h-screen items-center justify-center bg-slate-700 px-6 py-10">
-    <div
-      class="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 shadow-xl backdrop-blur-sm"
-    >
-      <ng-content></ng-content>
-    </div>
+  <!-- Right Side -->
+  <div class="flex min-h-screen w-full items-center justify-center bg-slate-700 px-6 py-10">
+    <ng-content></ng-content>
   </div>
 </section>

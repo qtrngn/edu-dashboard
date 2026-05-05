@@ -83,16 +83,16 @@ export class CreateUserModal implements OnInit {
   }
 
   private buildCreateInput(form: UserFormValue): CreateUserInput {
-  const input = {
-    type: this.managedUserType,
-  } as CreateUserInput & Record<UserManagementFieldName, string>;
+    const input = {
+      type: this.managedUserType,
+    } as CreateUserInput & Record<UserManagementFieldName, string>;
 
-  this.fields.forEach((field) => {
-    input[field.fieldname] = this.trimValue(form, field.fieldname);
-  });
+    this.fields.forEach((field) => {
+      input[field.fieldname] = this.trimValue(form, field.fieldname);
+    });
 
-  return input;
-}
+    return input;
+  }
 
   private trimValue(form: UserFormValue, fieldname: UserManagementFieldName): string {
     return (form[fieldname] ?? '').trim();

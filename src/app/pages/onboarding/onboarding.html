@@ -11,24 +11,24 @@
       @for (card of roleCards; track card.role) {
         <button
           type="button"
-          [routerLink]="['/login', card.role]"
+          [routerLink]="card.loginPath"
           class="group rounded-3xl border border-slate-800 bg-slate-800 p-8 text-left shadow-lg transition duration-300 hover:-translate-y-1 hover:bg-slate-700 hover:border"
-          [class]="card.borderHover"
+          [ngClass]="card.onboardingBorderHoverClass"
         >
           <div class="mb-6 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
             <img
-              [src]="card.image"
-              [alt]="card.title + ' onboarding image'"
+              [src]="card.onboardingImage"
+              [alt]="card.label + ' onboarding image'"
               class="h-48 w-full object-contain"
-              [ngClass]="card.borderHover"
+              [ngClass]="card.onboardingBorderHoverClass"
             />
           </div>
-          <h2 class="mb-3 text-2xl font-semibold">{{ card.title }}</h2>
+          <h2 class="mb-3 text-2xl font-semibold">{{ card.label }}</h2>
           <span
             class="inline-flex items-center text-sm font-medium transition group-hover:translate-x-1"
-            [ngClass]="card.textColor"
+            [ngClass]="card.onboardingTextClass"
           >
-            {{ card.subtitle }}
+             Continue →
           </span>
         </button>
       }

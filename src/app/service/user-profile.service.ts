@@ -1,15 +1,8 @@
 import { Injectable } from '@angular/core';
 import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
-import type { Role } from '../pages/onboarding/onboarding';
+import type { UserProfile } from '@app/types/auth.types';
 
-export interface UserProfile {
-  uid: string;
-  email: string;
-  username: string;
-  role: Role;
-  createdAt: string;
-}
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +10,7 @@ export interface UserProfile {
 export class UserProfileService {
   constructor(private readonly firebaseService: FirebaseService) {}
 
-  //   Write user to firestore
+  //   Write user profile to firestore
   async createUserProfile(profile: UserProfile): Promise<void> {
     const userRef = doc(this.firebaseService.db, 'users', profile.uid);
     await setDoc(userRef, profile);
@@ -34,7 +27,7 @@ export class UserProfileService {
     return snapshot.data() as UserProfile;
   }
 
-  // Get all users profiles
+  // Get all user profiles
   async getAllUserProfiles(): Promise<UserProfile[]> {
     const usersRef = collection(this.firebaseService.db, 'users');
     const snapshot = await getDocs(usersRef);

@@ -1,43 +1,48 @@
 <app-auth
   [role]="role"
-  [panelLabel]="role === 'admin' ? 'Admin' : 'Teacher'"
-  [panelTitle]="role === 'admin' ? 'Manage teachers' : 'Manage students'"
+  [panelLabel]="roleConfig.label"
+  [panelTitle]="roleConfig.authPanelTitle"
 >
-  <!-- Header -->
-  <div class="mb-8 text-center">
-    <p class="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-fuchsia-400">Login</p>
-    <h2 class="text-4xl font-bold text-white">Welcome back</h2>
-  </div>
+  <app-auth-form-shell
+    [badgeLabel]="formConfig.badgeLabel"
+    [title]="formConfig.title"
+    [description]="formConfig.description"
+  >
+    <form form-body (submit)="onSubmit($event)" class="space-y-5">
+      <div>
+        <input
+          [formField]="loginForm.email"
+          type="email"
+          placeholder="Email"
+          class="auth-input"
+        />
+      </div>
 
-  <!-- Form -->
-  <form (submit)="onSubmit($event)" class="space-y-5">
-    <div>
-      <input [formField]="loginForm.email" type="email" placeholder="Email" class="auth-input" />
-    </div>
+      <div>
+        <input
+          [formField]="loginForm.password"
+          type="password"
+          placeholder="Password"
+          class="auth-input"
+        />
+      </div>
 
-    <div>
-      <input
-        [formField]="loginForm.password"
-        type="password"
-        placeholder="Password"
-        class="auth-input"
-      />
-    </div>
+      @if (loginError()) {
+        <p class="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {{ loginError() }}
+        </p>
+      }
 
-    <!-- Error Message -->
-    @if (loginError()) {
-      <p class="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-        {{ loginError() }}
-      </p>
-    }
+      <button type="submit" class="auth-button">
+        {{ formConfig.submitLabel }}
+      </button>
+    </form>
 
-    <!-- Submit Button -->
-    <button type="submit" class="auth-button">Log in</button>
-
-    <!-- Register Link -->
-    <p class="text-center text-sm text-slate-400">
-      Don’t have an account?
-      <a [routerLink]="['/register', role]" class="auth-link"> Register </a>
+    <p form-footer class="text-center text-sm text-slate-400">
+      {{ formConfig.footerText }}
+      <a [routerLink]="roleConfig.registerPath" class="auth-link">
+        {{ formConfig.footerLinkLabel }}
+      </a>
     </p>
-  </form>
+  </app-auth-form-shell>
 </app-auth>

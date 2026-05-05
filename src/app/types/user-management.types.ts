@@ -8,6 +8,7 @@ export type UserManagementFieldName =
   | 'studentId'
   | 'grade';
   
+// Only text needed for now
 export type UserManagementFieldType = 'text' | 'textarea' | 'select' | 'radio' | 'checkbox';
 
 export type UserManagementFieldMode = 'view' | 'edit';

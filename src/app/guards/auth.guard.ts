@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '@service/auth.service';
 
-// Wait for AuthService to finish initializing and checking the user's auth state
+// Wait for AuthService to finish checking the user's auth state.
 async function waitForAuthReady(authService: AuthService): Promise<void> {
   while (!authService.isAuthReady()) {
     await new Promise((resolve) => setTimeout(resolve, 10));
@@ -10,16 +10,18 @@ async function waitForAuthReady(authService: AuthService): Promise<void> {
 }
 
 export const authGuard: CanActivateFn = async () => {
-    const authService = inject(AuthService);
-    const router = inject(Router);
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-    await waitForAuthReady(authService);
-    // Ask AuthService if the user is currently login 
-    const user = authService.getCurrentUser();
-    // If yes => allow access to the dashboard
-    if (user) {
-        return true;
-    }
-    // If not => fall back to onboarding page
-    return router.createUrlTree(['/']);
-}
+  await waitForAuthReady(authService);
+
+  // Allow dashboard access if a Firebase user is currently logged in.
+  const user = authService.getCurrentUser();
+
+  if (user) {
+    return true;
+  }
+
+  // Redirect unauthenticated users to onboarding.
+  return router.createUrlTree(['/']);
+};

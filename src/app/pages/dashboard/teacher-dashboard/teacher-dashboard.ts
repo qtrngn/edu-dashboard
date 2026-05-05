@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { DashboardShell } from '@shared/layout/dashboard-shell/dashboard-shell';
 import { UserManagementDashboard } from '@app/features/user-management-dashboard/user-management-dashboard';
 import { AuthService } from '@service/auth.service';
-import { EManagedUserType } from '@enums/user-management.enum';
+import { AuthNavigationService } from '@service/auth-navigation.service';
+import { EAuthRole } from '@enums/user-management.enum';
+import { getAuthRoleConfig } from '@configs/auth-role.config';
 
 @Component({
   selector: 'app-teacher-dashboard',
@@ -11,13 +12,18 @@ import { EManagedUserType } from '@enums/user-management.enum';
   templateUrl: './teacher-dashboard.html',
 })
 export class TeacherDashboard {
-  readonly managedUserType = EManagedUserType.Student;
+  private readonly roleConfig = getAuthRoleConfig(EAuthRole.Teacher);
+
+  readonly managedUserType = this.roleConfig.managedUserType;
+  readonly dashboardTitle = this.roleConfig.dashboardTitle;
+
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router,
+    private readonly authNavigationService: AuthNavigationService,
   ) {}
+
   async onLogoutClick(): Promise<void> {
     await this.authService.logout();
-    await this.router.navigate(['/login/teacher'], { replaceUrl: true });
+    await this.authNavigationService.navigateToLogin(EAuthRole.Teacher);
   }
 }
